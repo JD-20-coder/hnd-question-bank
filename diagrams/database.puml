@@ -1,0 +1,112 @@
+@startuml
+hide circle
+skinparam linetype ortho
+
+title HND Question Bank — Database ERD
+
+entity users {
+  * id : BIGINT
+  --
+  email : VARCHAR(255) <<unique>>
+  password_hash : VARCHAR(255)
+  full_name : VARCHAR(255)
+  role : ENUM(student,instructor,admin)
+  is_verified : BOOLEAN
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity refresh_tokens {
+  * id : BIGINT
+  --
+  user_id : BIGINT
+  token : VARCHAR(500)
+  expires_at : DATETIME
+  created_at : TIMESTAMP
+}
+
+entity question_banks {
+  * id : BIGINT
+  --
+  title : VARCHAR(255)
+  description : TEXT
+  owner_id : BIGINT
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity questions {
+  * id : BIGINT
+  --
+  bank_id : BIGINT
+  author_id : BIGINT
+  title : VARCHAR(255)
+  body : TEXT
+  answer : TEXT
+  difficulty : ENUM(easy,medium,hard)
+  type : ENUM(mcq,short,long,truefalse)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity tags {
+  * id : BIGINT
+  --
+  name : VARCHAR(100) <<unique>>
+}
+
+entity question_tags {
+  * question_id : BIGINT
+  * tag_id : BIGINT
+}
+
+entity exams {
+  * id : BIGINT
+  --
+  title : VARCHAR(255)
+  created_by : BIGINT
+  scheduled_at : DATETIME
+  duration_minutes : INT
+  created_at : TIMESTAMP
+}
+
+entity exam_questions {
+  * exam_id : BIGINT
+  * question_id : BIGINT
+}
+
+entity attempts {
+  * id : BIGINT
+  --
+  exam_id : BIGINT
+  user_id : BIGINT
+  score : DECIMAL(5,2)
+  taken_at : TIMESTAMP
+}
+
+' Relationships
+users ||--o{ refresh_tokens : "has"
+users ||--o{ question_banks : "owns"
+question_banks ||--o{ questions : "contains"
+users ||--o{ questions : "authors"
+questions ||--o{ question_tags : "has"
+tags ||--o{ question_tags : "tagged"
+users ||--o{ exams : "creates"
+exams ||--o{ exam_questions : "contains"
+questions ||--o{ exam_questions : "in"
+exams ||--o{ attempts : "has"
+users ||--o{ attempts : "takes"
+
+// foreign key notes
+refresh_tokens }|..|{ users : "user_id -> id"
+question_banks }|..|{ users : "owner_id -> id"
+questions }|..|{ question_banks : "bank_id -> id"
+questions }|..|{ users : "author_id -> id"
+question_tags }|..|{ questions : "question_id -> id"
+question_tags }|..|{ tags : "tag_id -> id"
+exam_questions }|..|{ exams : "exam_id -> id"
+exam_questions }|..|{ questions : "question_id -> id"
+attempts }|..|{ exams : "exam_id -> id"
+attempts }|..|{ users : "user_id -> id"
+
+@enduml

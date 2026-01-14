@@ -1,0 +1,90 @@
+// DBML representation generated from database-schema.sql
+Table users {
+  id bigint [pk, increment]
+  email varchar(255) [not null, unique]
+  password_hash varchar(255) [not null]
+  full_name varchar(255)
+  role enum('student','instructor','admin')
+  is_verified boolean
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table refresh_tokens {
+  id bigint [pk, increment]
+  user_id bigint [not null]
+  token varchar(500) [not null]
+  expires_at datetime [not null]
+  created_at timestamp
+}
+
+Table question_banks {
+  id bigint [pk, increment]
+  title varchar(255) [not null]
+  description text
+  owner_id bigint
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table questions {
+  id bigint [pk, increment]
+  bank_id bigint [not null]
+  author_id bigint
+  title varchar(255) [not null]
+  body text [not null]
+  answer text
+  difficulty enum('easy','medium','hard')
+  type enum('mcq','short','long','truefalse')
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table tags {
+  id bigint [pk, increment]
+  name varchar(100) [not null, unique]
+}
+
+Table question_tags {
+  question_id bigint [not null]
+  tag_id bigint [not null]
+  indexes {
+    (question_id, tag_id) [pk]
+  }
+}
+
+Table exams {
+  id bigint [pk, increment]
+  title varchar(255) [not null]
+  created_by bigint
+  scheduled_at datetime
+  duration_minutes int
+  created_at timestamp
+}
+
+Table exam_questions {
+  exam_id bigint [not null]
+  question_id bigint [not null]
+  indexes {
+    (exam_id, question_id) [pk]
+  }
+}
+
+Table attempts {
+  id bigint [pk, increment]
+  exam_id bigint [not null]
+  user_id bigint [not null]
+  score decimal(5,2)
+  taken_at timestamp
+}
+
+Ref: refresh_tokens.user_id > users.id ON DELETE CASCADE
+Ref: question_banks.owner_id > users.id ON DELETE SET NULL
+Ref: questions.bank_id > question_banks.id ON DELETE CASCADE
+Ref: questions.author_id > users.id ON DELETE SET NULL
+Ref: question_tags.question_id > questions.id ON DELETE CASCADE
+Ref: question_tags.tag_id > tags.id ON DELETE CASCADE
+Ref: exam_questions.exam_id > exams.id ON DELETE CASCADE
+Ref: exam_questions.question_id > questions.id ON DELETE CASCADE
+Ref: attempts.exam_id > exams.id ON DELETE CASCADE
+Ref: attempts.user_id > users.id ON DELETE CASCADE
