@@ -1,0 +1,127 @@
+# 🚀 DEPLOYMENT QUICK CARD
+
+## Status: ✅ READY TO DEPLOY
+
+**All code built, tested, and committed to Git**
+
+---
+
+## 📍 STEP 1: Create GitHub Repo (2 min)
+
+Go to: https://github.com/new
+- Name: `hnd-question-bank`
+- Visibility: Public
+- **Don't** init with README
+- Click "Create repository"
+
+---
+
+## 📍 STEP 2: Push Code to GitHub (3 min)
+
+**Copy these commands** (replace YOUR_USERNAME):
+
+```powershell
+cd "C:\Users\deppj\Desktop\B-TECH DOCS\Eka Amstrome Zeba\hnd-question-bank"
+
+git remote add origin https://github.com/YOUR_USERNAME/hnd-question-bank.git
+git branch -M main  
+git push -u origin main
+```
+
+---
+
+## 📍 STEP 3: Deploy to Vercel (5 min)
+
+Go to: https://vercel.com/new
+1. Login with GitHub
+2. Select your repository
+3. Click "Import"
+4. **Set Environment Variables:**
+
+```
+DB_HOST=your-database-host
+DB_PORT=3306
+DB_USER=your-user
+DB_PASSWORD=your-password
+DB_NAME=hnd_question_bank
+JWT_SECRET=random-secret-string-32-chars-min
+NODE_ENV=production
+```
+
+5. Click "Deploy"
+6. Wait 5-10 minutes
+7. Your app is live! 🎉
+
+---
+
+## 📍 STEP 4: Setup Database (5 min)
+
+**Choose one service:**
+
+### PlanetScale (Easiest)
+- Go to: https://planetscale.com
+- Create free account
+- Create new database
+- Copy credentials to Vercel env vars
+
+### ClearDB
+- Go to: https://www.cleardb.com
+- Create MySQL database
+- Get credentials
+
+### AWS RDS
+- Go to: https://aws.amazon.com/rds
+- Create MySQL instance
+- Professional tier (paid)
+
+---
+
+## 🎯 That's It!
+
+**Total time: ~20 minutes**
+
+Your app is now live at:
+```
+https://your-vercel-domain.vercel.app
+```
+
+---
+
+## ✅ Test Checklist
+
+After deployment:
+- [ ] App loads at https://your-domain.vercel.app
+- [ ] Home page shows statistics
+- [ ] Can register account
+- [ ] Can login
+- [ ] Can create question bank
+- [ ] Can upload question
+- [ ] Can browse as guest
+- [ ] All features work
+
+---
+
+## 🆘 Troubleshooting
+
+**"Build failed"** → Check Vercel logs for errors
+
+**"Cannot connect to database"** → Verify DB credentials in env vars
+
+**"Styles look broken"** → Clear Vercel cache and redeploy
+
+**"API 404 errors"** → Verify server routes are compiled in dist/
+
+---
+
+## 📞 Full Guides
+
+- Detailed deployment: `GITHUB_AND_VERCEL_DEPLOYMENT.md`
+- Project status: `PROJECT_COMPLETION_FINAL.md`
+- Architecture: `ARCHITECTURE.md`
+- Troubleshooting: `TROUBLESHOOTING.md`
+
+---
+
+**Ready to deploy? Start with Step 1!** 🚀
+
+**Questions? Check the detailed guides above.**
